@@ -48,12 +48,17 @@ with gr.Blocks(title="Code Converter") as demo:
         converted_out = gr.Textbox(lines=20, label="Converted Code")
 
     with gr.Row():
-        lang_dropdown = gr.Dropdown(TARGET_LANGUAGES, value="Python", label="Target Language")
-        custom_lang = gr.Textbox(label="Custom target language (when 'Other' selected)", placeholder="e.g. Nim, Haskell")
-        detect_btn = gr.Button("Detect Language")
-        convert_btn = gr.Button("Convert Code")
+        with gr.Column():
+            detect_btn = gr.Button("Detect Language")
+            detected = gr.Textbox(label="Detected Language", interactive=False)
+        with gr.Column():
+            convert_btn = gr.Button("Convert Code")
+            lang_dropdown = gr.Dropdown(TARGET_LANGUAGES, value="Python", label="Target Language")
+            
+    custom_lang = gr.Textbox(label="Custom target language (when 'Other' selected)", placeholder="e.g. Nim, Haskell")
 
-    detected = gr.Textbox(label="Detected Language", interactive=False)
+
+    
 
     detect_btn.click(fn=handle_detect, inputs=code_in, outputs=detected)
     convert_btn.click(fn=handle_convert, inputs=[code_in, lang_dropdown, custom_lang], outputs=converted_out)
